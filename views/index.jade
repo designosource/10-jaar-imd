@@ -5,6 +5,7 @@ block content
   if(!user)
     a(href="/auth/facebook")='Log in'
   else
+    a(href="/logout")='Log out'
     img(src="https://graph.facebook.com/"+ user.id +"/picture")
   form(name="addpost",method="post",action="/addpost")
         input(type="text", placeholder="Name", name="name")
