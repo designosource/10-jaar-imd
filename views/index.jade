@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  if(!user)
+    a(href="/auth/facebook")='Log in'
+  else
+    img(src="https://graph.facebook.com/"+ user.id +"/picture")
+  form(name="addpost",method="post",action="/addpost")
+        input(type="text", placeholder="Name", name="name")
+        input(type="text", placeholder="Message", name="message")
+        button(type="submit") submit
+  ul
+    each post, p in postlist
+      li
+        p=post.name + ' zei: ' + post.message
