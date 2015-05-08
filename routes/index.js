@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+
+var fs = require('fs');
+var mime = require('mime');
+
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var session = require('express-session');
@@ -21,22 +25,29 @@ router.get('/', function(req, res, next) {
 router.post('/addpost', function(req, res) {
     var db = req.db;
     
-    var inputName = req.body.name;
+    var inputUserId = req.user.id;
+    var inputName = req.user.displayName;
     var inputMessage = req.body.message;
+    var inputImageData = fs.readFileSync('public/images/qr_code_5.jpg');
+    inputImageData = inputImageData.toString('base64');
+    var inputImageType = mime.lookup('public/images/qr_code_5.jpg');
 
     var collection = db.get('postcollection');
 
     collection.insert({
+        "user_id" : inputUserId,
         "name" : inputName,
-        "message" : inputMessage
+        "message" : inputMessage,
+        "img" : {
+            "data": inputImageData,
+            "type": inputImageType
+        }
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         }
         else {
-            // If it worked, set the header so the address bar doesn't still say /adduser
             res.location("/");
-            // And forward to success page
             res.redirect("/");
         }
     });
