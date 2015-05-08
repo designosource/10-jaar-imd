@@ -15,7 +15,7 @@
     "nodemon": "^1.3.7",
     "serve-favicon": "~2.2.0",
     "fs": "*",
-    "mime": "*",
+    "connect-multiparty": "*",
     "passport": "*",
     "passport-facebook": "*",
     "express-session": "*",

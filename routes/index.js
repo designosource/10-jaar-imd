@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var fs = require('fs');
-var mime = require('mime');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -22,15 +23,16 @@ router.get('/', function(req, res, next) {
 });
 
 /* POST to Add Post Service */
-router.post('/addpost', function(req, res) {
+router.post('/addpost', multipartMiddleware, function(req, res) {
     var db = req.db;
     
+    console.log(req.files);
     var inputUserId = req.user.id;
     var inputName = req.user.displayName;
     var inputMessage = req.body.message;
-    var inputImageData = fs.readFileSync('public/images/qr_code_5.jpg');
+    var inputImageType = req.files.image.type;
+    var inputImageData = fs.readFileSync(req.files.image.path);
     inputImageData = inputImageData.toString('base64');
-    var inputImageType = mime.lookup('public/images/qr_code_5.jpg');
 
     var collection = db.get('postcollection');
 

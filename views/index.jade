@@ -7,8 +7,9 @@ block content
     else
         a(href="/logout")='Log out'
         img(src="https://graph.facebook.com/"+ user.id +"/picture")
-        form(name="addpost",method="post",action="/addpost")
+        form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
             input(type="text", placeholder="Message", name="message")
+            input(type='file', name="image")
             button(type="submit") submit
     ul
         each post, p in postlist
