@@ -9,6 +9,8 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var session = require('express-session');
 
+var io = require('../io');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     var db = req.db;
@@ -46,7 +48,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
             case "image/jpeg":
             case "image/gif":
             case "image/svg": 
-                uploadFolder = "images/uploads/";
+                uploadFolder = "uploads/images/";
                 uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputMessage);
                 break; 
             default:
@@ -75,17 +77,26 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
             
             fs.writeFile(newPath, data, function (err) {
                 collection.insert({
-                    "user_id" : inputUserId,
-                    "name" : inputName,
-                    "message" : inputMessage,
-                    "img" : {
-                        "src": uploadFolder+imageName
+                    user_id : inputUserId,
+                    name : inputName,
+                    message : inputMessage,
+                    img : {
+                        src: uploadFolder+imageName
                     }
                 }, function (err, doc) {
                     if (err) {
                         res.send("There was a problem adding the information to the database.");
                     }
                     else {
+                        io.emit('newObject', 
+                            {
+                                user_id : inputUserId,
+                                name : inputName,
+                                message : inputMessage,
+                                img : {
+                                    src: uploadFolder+imageName
+                            }
+                        });
                         req.flash('feedback', {msg: 'Message succesfully uploaded.'});
                         res.location("/");
                         res.redirect("/");

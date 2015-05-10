@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#postlist img {
+    max-width: 200px;
+    max-height: 200px;
+}

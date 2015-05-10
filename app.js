@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
-var config = require('./configuration/config')
+var config = require('./configuration/config');
 
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -100,5 +100,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+/*io.on('connection', function (socket) {
+    socket.emit('getJson', contourTestData);
+});*/
 
 module.exports = app;

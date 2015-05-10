@@ -15,8 +15,16 @@ block content
         each message, m in feedback
             li
                 p=message.msg
-    ul
+    ul#postlist
         each post, p in postlist
             li
                 p=post.name + ' zei: ' + post.message
                 img(src=post.img.src)
+                
+    script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
+    script(src="/socket.io/socket.io.js")
+    script.
+        var socket = io.connect('http://localhost:3000');
+        socket.on('newObject', function (data) {
+            $('#postlist').append("<li><p>" + data.message + "</p><img src='" + data.img.src + "'></li>")
+        });
