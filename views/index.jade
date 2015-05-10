@@ -11,10 +11,12 @@ block content
             input(type="text", placeholder="Message", name="message")
             input(type='file', name="image")
             button(type="submit") submit
+    if(feedback)
+        each message, m in feedback
+            li
+                p=message.msg
     ul
         each post, p in postlist
             li
                 p=post.name + ' zei: ' + post.message
                 img(src=post.img.src)
-                //if(post.img.type == 'image/png' || post.img.type == 'image/jpeg' || post.img.type == 'image/gif')
-                    img(src="data:" + post.img.type + ";base64," + post.img.data)

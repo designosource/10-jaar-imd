@@ -17,12 +17,13 @@ router.get('/', function(req, res, next) {
         res.render('index', {
             title: 'IMD Timeline',
             postlist : docs,
-            user: req.user
+            user: req.user,
+            feedback: req.flash('feedback')
         });
     });
 });
 
-/* POST to Add Post Service */
+/* POST form to /addpost */
 router.post('/addpost', multipartMiddleware, function(req, res) {
     var db = req.db;
     var collection = db.get('postcollection');
@@ -30,17 +31,47 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     var inputUserId = req.user.id;
     var inputName = req.user.displayName;
     var inputMessage = req.body.message;
+    var uploadFolder = "";
     
-    fs.readFile(req.files.image.path, function (err, data) {
+    req.checkBody('message', 'Message was empty.').notEmpty();
+    var errors = req.validationErrors();
+    
+    if (errors) {
+        req.flash('feedback', errors);
+        res.location("/");
+        res.redirect("/");
+    } else {
+        switch (req.files.image.type) {
+            case "image/png":
+            case "image/jpeg":
+            case "image/gif":
+            case "image/svg": 
+                uploadFolder = "images/uploads/";
+                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputMessage);
+                break; 
+            default:
+                req.flash('feedback', {msg: 'Uploaded file was not an image.'});
+                res.location("/");
+                res.redirect("/");
+                break; 
+        }
+    }
+});
 
-		var imageName = req.files.image.name;
+var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, inputMessage) {
+    var db = req.db;
+    var collection = db.get('postcollection');
+    
+    fs.readFile(file.path, function (err, data) {
+
+		var imageName = file.name;
 
 		if(!imageName){
+            res.location("/");
             res.redirect("/");
-			res.end();
 
 		} else {
-            var newPath = __dirname + "/../public/images/uploads/" + imageName;
+            var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
             
             fs.writeFile(newPath, data, function (err) {
                 collection.insert({
@@ -48,13 +79,14 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                     "name" : inputName,
                     "message" : inputMessage,
                     "img" : {
-                        "src": "images/uploads/"+imageName
+                        "src": uploadFolder+imageName
                     }
                 }, function (err, doc) {
                     if (err) {
                         res.send("There was a problem adding the information to the database.");
                     }
                     else {
+                        req.flash('feedback', {msg: 'Message succesfully uploaded.'});
                         res.location("/");
                         res.redirect("/");
                     }
@@ -62,7 +94,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
             });
 		}
 	});
-});
+}
 
 /* Facebook login */
 router.get('/auth/facebook', passport.authenticate('facebook'));
