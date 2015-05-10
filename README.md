@@ -10,3 +10,8 @@
 - Open another terminal and run `mongo` and `use imd_timeline` in MongoDB's `bin` folder
 - Open another terminal, go to the root folder and run `npm start`
 - The app will be running on [localhost port 3000](http://localhost:3000)
+
+## Other stuff to know
+
+- The app currently only accepts images
+- The app will write uploaded images to map `public/images/`
