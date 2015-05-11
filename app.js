@@ -100,8 +100,4 @@ app.use(function(err, req, res, next) {
   });
 });
 
-/*io.on('connection', function (socket) {
-    socket.emit('getJson', contourTestData);
-});*/
-
 module.exports = app;

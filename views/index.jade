@@ -8,13 +8,15 @@ block content
         a(href="/logout")='Log out'
         img(src="https://graph.facebook.com/"+ user.id +"/picture")
         form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
+            input(id="datepicker", type="text", placeholder="Date", name="date")
             input(type="text", placeholder="Message", name="message")
             input(type='file', name="image")
             button(type="submit") submit
     if(feedback)
-        each message, m in feedback
-            li
-                p=message.msg
+        ul
+            each message, m in feedback
+                li
+                    p(class=feedbackType)=message.msg
     ul#postlist
         each post, p in postlist
             li
@@ -22,9 +24,11 @@ block content
                 img(src=post.img.src)
                 
     script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
-    script(src="/socket.io/socket.io.js")
+    script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
+    script(type="text/javascript", src="/javascripts/script.js")
+    script(type="text/javascript", src="/socket.io/socket.io.js")
     script.
         var socket = io.connect('http://localhost:3000');
         socket.on('newObject', function (data) {
-            $('#postlist').append("<li><p>" + data.message + "</p><img src='" + data.img.src + "'></li>")
+            $('#postlist').append("<li><p>" + data.name + " zei: " + data.message + "</p><img src='" + data.img.src + "'></li>")
         });
