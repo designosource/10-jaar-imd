@@ -14,4 +14,4 @@
 ## Other stuff to know
 
 - The app currently only accepts images
-- The app will write uploaded images to map `public/images/`
+- The app will write uploaded images to map `public/uploads/images/`
