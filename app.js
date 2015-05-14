@@ -18,6 +18,7 @@ var db = monk('localhost:27017/imd_timeline');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var facebookRoutes = require('./routes/facebook');
 
 var app = express();
 
@@ -32,7 +33,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
     clientSecret: config.facebook_api_secret,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    callbackURL: "http://localhost:3000/facebook/auth/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
         return done(null, profile);
@@ -63,11 +64,8 @@ app.use(function(req,res,next){
 });
 
 app.use('/', routes);
+app.use('/facebook', facebookRoutes);
 app.use('/users', users);
-
-app.use('/auth/facebook', routes);
-app.use('/auth/facebook/callback', routes);
-app.use('/logout', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
