@@ -5,10 +5,6 @@ var fs = require('fs');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
-var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
-var session = require('express-session');
-
 var io = require('../io');
 
 /* GET home page. */
@@ -17,7 +13,7 @@ router.get('/', function(req, res, next) {
     var collection = db.get('postcollection');
     collection.find({},{},function(e,docs){
         res.render('index', {
-            title: 'IMD Timeline',
+            title: "IMD's 10th Anniversary",
             postlist : docs,
             user: req.user,
             feedbackType: req.flash('feedbackType'),
@@ -103,6 +99,7 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
                             {
                                 user_id : inputUserId,
                                 name : inputName,
+                                date : inputDate,
                                 message : inputMessage,
                                 img : {
                                     src: uploadFolder+imageName
@@ -113,27 +110,6 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
             });
 		}
 	});
-}
-
-/* Facebook login */
-router.get('/auth/facebook', passport.authenticate('facebook'));
-
-router.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-    successRedirect : '/', 
-    failureRedirect: '/login' 
-}), function(req, res) {
-        res.redirect('/');
-    }
-);
-
-router.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-});
-
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
 }
 
 module.exports = router;

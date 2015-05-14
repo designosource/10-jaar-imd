@@ -1,27 +1,140 @@
 extends layout
 
 block content
-    h1= title
-    if(!user)
-        a(href="/auth/facebook")='Log in'
-    else
-        a(href="/logout")='Log out'
-        img(src="https://graph.facebook.com/"+ user.id +"/picture")
-        form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
-            input(id="datepicker", type="text", placeholder="Date", name="date")
-            input(type="text", placeholder="Message", name="message")
-            input(type='file', name="image")
-            button(type="submit") submit
-    if(feedback)
-        ul
-            each message, m in feedback
-                li
-                    p(class=feedbackType)=message.msg
-    ul#postlist
-        each post, p in postlist
+    header
+        div(class="v-center-outer")
+            div(class="v-center")
+                div(class="v-center-inner")
+                    div(class="container")
+                        h1=title
+                        h2="Vier samen met ons het tienjarige bestaan van IMD"
+                        p="Op 20 mei 2015 vindt onze jaarlijkse inspiratiebeurs plaats waar de IMD’ers uit het eerste en tweede jaar hun project komen voorstellen. De dag sluiten we af met burgers en hotdogs à volonté. Reserveer dus snel je tickets!"
+                        a(class="button" href="#about")="Check it out"
+                        br
+                        a(target="_blank" href="http://weareimd.be")
+                            img(class="imd-logo", src="/images/imd.png", alt="Interactive Multimedia Design")
+                        a(target="_blank" href="http://thomasmore.be")
+                            img(class="imd-logo", src="/images/tm.png", alt="Thomas More")
+    div(class="timeline-div cf")
+        ul(class="filter")
+            li(class="active")
+                a(href="#")="2005"
             li
-                p=post.name + ' zei: ' + post.message
-                img(src=post.img.src)
+                a(href="#")="2006"
+            li
+                a(href="#")="2007"
+            li
+                a(href="#")="2008"
+            li
+                a(href="#")="2009"
+            li
+                a(href="#")="2010"
+            li
+                a(href="#")="2011"
+            li
+                a(href="#")="2012"
+            li
+                a(href="#")="2013"
+            li
+                a(href="#")="2014"
+            li
+                a(href="#")="2015"
+        div(class="bar")
+        div(class="timeline")
+            div(class="entry first")
+                p(class="title")="A baby was born!"
+                p(class="date")="18/09/2005"
+            each post, p in postlist
+                div(class="entry")
+                    if(post.img) 
+                        div(class="header", style="background-image:url(" + post.img.src + ")")
+                    div(class="content")
+                        p(class="title")="Titel"
+                        p(class="date")=post.date
+                        hr
+                        p(class="message")=post.message
+                        img(class="profielfoto", src="https://graph.facebook.com/"+ post.user_id +"/picture")
+                        p(class="naam")=post.name
+                        
+        div(class="addevent")
+            div(class="container")
+                h2="Voeg een gebeurtenis toe"
+                p="Was jij ooit ook een student Interactive Multimedia Design en heb je de beginjaren meegemaakt, dan kan je je hoogstwaarschijnlijk nog een leuke anekdote herinneren. Door die gebeurtenis toe te voegen aan de tijdlijn, haal je samen met ons leuke herinneringen boven."
+                if(!user)
+                    a(href="/facebook/auth/facebook")='Log in'
+                else
+                    a(href="/facebook/logout")='Log out'
+                    form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
+                        input(id="datepicker", type="text", placeholder="Date", name="date")
+                        input(type="text", placeholder="Message", name="message")
+                        input(type='file', name="image")
+                        button(type="submit")="Submit"
+    div(class="about cf" id="about")
+        div(class="container")
+            div(class="col3")
+                div(class="col2")
+                    img(src="/images/planning.png", alt="Planning", class="icon")
+                div(class="col2")
+                    h2="Inspiratiebeurs 13:00 - 17:00"
+                    p="Enkele (of vele) jaren geleden stond jij ook op de inspiratiebeurs. Benieuwd hoe het er aan de andere kant van de tafel aan toe gaat?"
+                    p="Onze IMD-studenten uit het eerste en tweede jaar komen hun projecten voorstellen waar ze het tweede semester mee bezig zijn geweest."
+                    p="1IMD werkte rond een rijkere museumbeleving voor, tijdens of na een museumbezoek. 2IMD maakte apps om de toeristische sector digitaler te maken. Onze studenten tonen hun multimedia talent en vertellen graag over hun projecten!"
+            div(class="col3")
+                div(class="col2")
+                    img(src="/images/mensen.png", alt="Mensen", class="icon")
+                div(class="col2")
+                    h2="Meat & greet 17:00 - 22:00"
+                    p
+                        | Heb je zin in een gezellige get-together met je collega oud-studenten? We sluiten het semester af met huidig IMD, docenten en alumni met burgers en hotdogs à volonté. Ook staat er een spectaculaire aankondiging op het programma! Mis dit niet en kies hieronder voor een meat & greet ticket. Wanneer je graag op zowel de beurs als de get-together aanwezig bent, is het combiticket wat je nodig hebt!
+                        ul(class="prijzen")
+                            li
+                                div
+                                    img(src="/images/burger-icon.png", alt="Burgers")
+                                    | Burgers & hotdogs
+                                    br
+                                    | €1
+                            li(class="middle")
+                                div
+                                    img(src="/images/veggie-icon.png", alt="Veggie")
+                                    | Veggieburgers
+                                    br
+                                    | €1
+                            li
+                                div
+                                    img(src="/images/drank-icon.png", alt="Drank")
+                                    | Drank
+                                    br
+                                    | €1
+
+    div(class="info")
+        ul
+            li(class="col")
+                a(target="_blank", href="https://www.google.be/maps/place/Thomas+More+Mechelen+-+Campus+Kruidtuin/@51.025196,4.4845424,17z/data=!4m7!1m4!3m3!1s0x47c3e5cc87d28e87:0xa472dbc683538fd3!2sLange+Ridderstraat,+2800+Mechelen!3b1!3m1!1s0x0000000000000000:0xc77ce3f5f8cfc7de?hl=nl")="The Creativity Gym - Kruidtuin"
+            li(class="col")="vanaf 13:00"
+            li(class="col")="Tickets volledig gratis!"
+
+    div(class="tickets", id="tickets")
+        div(class="container")
+            h2="Bestel je tickets nu!"
+            p
+                | De tickets zijn dan wel gratis, maar onze Creativity Gym heeft maar plaats voor een beperkt aantal personen, wees er daarom snel bij. Tickets verkrijgbaar tot 15 mei 2015. Kan je niet wachten en wil je graag op de hoogte blijven? Volg ons dan via 
+                a(class="sm", target="_blank", href="https://www.facebook.com/events/495672777255225/")="Facebook"
+                | &
+                a(class="sm", target="_blank", href="https://twitter.com/weareimd")="Twitter"
+            br
+            div(class="ticketoption")
+                a(class="button", target="_blank", href="https://www.eventbrite.com/e/tickets-inspiratiebeurs-2015-16801325216")="Inspiratiebeurs 13:00 - 17:00"
+                a(class="button", target="_blank", href="https://www.eventbrite.com/e/tickets-inspiratiebeurs-2015-16801325216")="Meat & greet 17:00 - 22:00"
+                a(class="combi", target="_blank", href="https://www.eventbrite.com/e/tickets-inspiratiebeurs-2015-16801325216")="Combiticket"
+
+    footer
+        div(class="container")
+            a(class="designo", target="_blank", href="https://www.eventbrite.com/e/tickets-inspiratiebeurs-2015-16801325216")
+                img(class="designo-logo", src="/images/designo.png", alt="Designosource")
+            a(target="_blank", href="http://designosource.be")
+                br
+                | Website door designosource.be
+                    
                 
     script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
@@ -30,5 +143,9 @@ block content
     script.
         var socket = io.connect('http://localhost:3000');
         socket.on('newObject', function (data) {
-            $('#postlist').append("<li><p>" + data.name + " zei: " + data.message + "</p><img src='" + data.img.src + "'></li>")
+            if(data.img.src) {
+                $('.timeline').append("<div class='entry'><div class='header' style='background-image:url(" + data.img.src + ")'></div><div class='content'><p class='title'>Titel</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
+            } else {
+                $('.timeline').append("<div class='entry'><div class='content'><p class='title'>Titel</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
+            }
         });
