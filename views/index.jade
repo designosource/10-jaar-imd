@@ -46,10 +46,10 @@ block content
                 p(class="date")="18/09/2005"
             each post, p in postlist
                 div(class="entry")
-                    if(post.img) 
-                        div(class="header", style="background-image:url(" + post.img.src + ")")
+                    if(post.asset) 
+                        div(class="header", style="background-image:url(" + post.asset.src + ")")
                     div(class="content")
-                        p(class="title")="Titel"
+                        p(class="title")=post.title
                         p(class="date")=post.date
                         hr
                         p(class="message")=post.message
@@ -63,7 +63,9 @@ block content
                 if(!user)
                     a(class="log")(href="/facebook/auth/facebook")='Log in'
                 else
-                    a(class="log")(href="/facebook/logout")='Log out'                    
+                    a(class="log")(href="/facebook/logout")='Log out'
+                    img(class="profielfoto", src="https://graph.facebook.com/"+ user.id +"/picture") 
+                    p=user.displayName             
                     form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
                         input(type="text", placeholder="Titel", name="title")
                         input(id="datepicker", type="text", placeholder="Datum", name="date")
@@ -144,8 +146,8 @@ block content
     script.
         var socket = io.connect('http://localhost:3000');
         socket.on('newObject', function (data) {
-            if(data.img.src) {
-                $('.timeline').append("<div class='entry'><div class='header' style='background-image:url(" + data.img.src + ")'></div><div class='content'><p class='title'>Titel</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
+            if(data.asset.src) {
+                $('.timeline').append("<div class='entry'><div class='header' style='background-image:url(" + data.asset.src + ")'></div><div class='content'><p class='title'>Titel</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
             } else {
                 $('.timeline').append("<div class='entry'><div class='content'><p class='title'>Titel</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
             }
