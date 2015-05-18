@@ -63,8 +63,8 @@ p, a, .prijzen li {
   padding: 9px 14px 7px 14px; }
   .button:hover, .combi:hover {
     background: transparent;
-    border: 3px solid;
-    padding: 7px 12px 5px 12px; }
+    border: 3px solid; 
+    padding: 6px 11px 4px 11px;}
 
 .cf {
   *zoom: 1; }
@@ -175,7 +175,8 @@ header {
     .tickets .sm:hover {
       border: none; }
   .tickets .combi {
-    padding: 7px 12px 5px 12px;
+    
+    padding: 6px 11px 4px 11px;
     display: block;
     margin: 0 auto;
     border: 3px solid #333333 !important;
@@ -352,6 +353,43 @@ header {
   padding-bottom: 15px;
   max-width: 650px;
   margin: 0 auto; }
+.log{
+	color: #ffffff;
+}
+
+input, textarea{
+	width: 70%;
+	max-width: 70%;
+	border: 0;
+	display: block;
+	margin: 15px auto;
+	padding: 10px;
+	outline: none;
+} 
+
+textarea{
+	height: 90px;
+} 
+
+input:first-child{
+	margin-top: 30px;
+}
+input[type="file"]{
+	color: #ffffff;
+	max-width: 230px;
+}
+
+button{
+	background-color: #fc4d4d !important;
+	border: 0;
+	padding: 7px 12px 5px 12px;
+}
+button:hover{
+	border-color: #fc4d4d !important;
+	background-color: transparent !important;
+	color: #fc4d4d !important;
+    padding: 6px 11px 4px 11px;
+}
 
 /* !------------------ FOOTER -------------------- */
 footer {

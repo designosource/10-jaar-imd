@@ -61,14 +61,15 @@ block content
                 h2="Voeg een gebeurtenis toe"
                 p="Was jij ooit ook een student Interactive Multimedia Design en heb je de beginjaren meegemaakt, dan kan je je hoogstwaarschijnlijk nog een leuke anekdote herinneren. Door die gebeurtenis toe te voegen aan de tijdlijn, haal je samen met ons leuke herinneringen boven."
                 if(!user)
-                    a(href="/facebook/auth/facebook")='Log in'
+                    a(class="log")(href="/facebook/auth/facebook")='Log in'
                 else
-                    a(href="/facebook/logout")='Log out'
+                    a(class="log")(href="/facebook/logout")='Log out'                    
                     form(name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
-                        input(id="datepicker", type="text", placeholder="Date", name="date")
-                        input(type="text", placeholder="Message", name="message")
-                        input(type='file', name="image")
-                        button(type="submit")="Submit"
+                        input(type="text", placeholder="Titel", name="title")
+                        input(id="datepicker", type="text", placeholder="Datum", name="date")
+                        textarea(placeholder="Dit weet ik nog van mijn jaren in IMD ...", name="message")
+                        input(type='file', name="image" id="file")
+                        button(type="submit" class="button")="Submit"
     div(class="about cf" id="about")
         div(class="container")
             div(class="col3")
