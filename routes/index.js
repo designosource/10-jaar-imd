@@ -29,10 +29,12 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     
     var inputUserId = req.user.id;
     var inputName = req.user.displayName;
+    var inputTitle = req.body.title;
     var inputMessage = req.body.message;
     var inputDate = req.body.date;
     var uploadFolder = "";
     
+    req.checkBody('title', 'Title was empty.').notEmpty();
     req.checkBody('message', 'Message was empty.').notEmpty();
     req.checkBody('date', 'Date was empty.').notEmpty();  
 
@@ -50,8 +52,11 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
             case "image/gif":
             case "image/svg": 
                 uploadFolder = "uploads/images/";
-                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputMessage, inputDate);
+                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
                 break; 
+            case "file/mp4":
+                uploadFolder = "uploads/video/";
+                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
             default:
                 req.flash('feedbackType', 'error');
                 req.flash('feedback', {msg: 'Uploaded file was not an image.'});
@@ -62,7 +67,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     }
 });
 
-var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, inputMessage, inputDate) {
+var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate) {
     var db = req.db;
     var collection = db.get('postcollection');
     
@@ -76,17 +81,20 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
 
 		} else {
             var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
-            
-            fs.writeFile(newPath, data, function (err) {
-                collection.insert({
+            var newObject = 
+                {
                     user_id : inputUserId,
                     name : inputName,
+                    title: inputTitle,
                     message : inputMessage,
-                    date: inputDate,
-                    img : {
+                    date : inputDate,
+                    asset: {
                         src: uploadFolder+imageName
                     }
-                }, function (err, doc) {
+                };
+            
+            fs.writeFile(newPath, data, function (err) {
+                collection.insert(newObject, function (err, doc) {
                     if (err) {
                         res.send("There was a problem adding the information to the database.");
                     }
@@ -95,16 +103,7 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
                         req.flash('feedback', {msg: 'Message succesfully uploaded.'});
                         res.location("/");
                         res.redirect("/");
-                        io.emit('newObject', 
-                            {
-                                user_id : inputUserId,
-                                name : inputName,
-                                date : inputDate,
-                                message : inputMessage,
-                                img : {
-                                    src: uploadFolder+imageName
-                            }
-                        });
+                        io.emit('newObject', newObject);
                     }
                 });
             });
