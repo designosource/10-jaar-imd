@@ -44,7 +44,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
         req.flash('feedbackType', 'error');
         req.flash('feedback', errors);
         res.location("/");
-        res.redirect("/");
+        res.redirect("/#addevent");
     } else {
         switch (req.files.image.type) {
             case "image/png":
@@ -61,7 +61,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                 req.flash('feedbackType', 'error');
                 req.flash('feedback', {msg: 'Uploaded file was not an image.'});
                 res.location("/");
-                res.redirect("/");
+                res.redirect("/#addevent");
                 break; 
         }
     }
@@ -75,39 +75,33 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
 
 		var imageName = file.name;
 
-		if(!imageName){
-            res.location("/");
-            res.redirect("/");
+        var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
+        var newObject = 
+            {
+                user_id : inputUserId,
+                name : inputName,
+                title: inputTitle,
+                message : inputMessage,
+                date : inputDate,
+                asset: {
+                    src: uploadFolder+imageName
+                }
+            };
 
-		} else {
-            var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
-            var newObject = 
-                {
-                    user_id : inputUserId,
-                    name : inputName,
-                    title: inputTitle,
-                    message : inputMessage,
-                    date : inputDate,
-                    asset: {
-                        src: uploadFolder+imageName
-                    }
-                };
-            
-            fs.writeFile(newPath, data, function (err) {
-                collection.insert(newObject, function (err, doc) {
-                    if (err) {
-                        res.send("There was a problem adding the information to the database.");
-                    }
-                    else {
-                        req.flash('feedbackType', 'success');
-                        req.flash('feedback', {msg: 'Message succesfully uploaded.'});
-                        res.location("/");
-                        res.redirect("/");
-                        io.emit('newObject', newObject);
-                    }
-                });
+        fs.writeFile(newPath, data, function (err) {
+            collection.insert(newObject, function (err, doc) {
+                if (err) {
+                    res.send("There was a problem adding the information to the database.");
+                }
+                else {
+                    req.flash('feedbackType', 'success');
+                    req.flash('feedback', {msg: 'Message succesfully uploaded.'});
+                    res.location("/");
+                    res.redirect("/#timeline");
+                    io.emit('newObject', newObject);
+                }
             });
-		}
+        });
 	});
 }
 
