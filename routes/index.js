@@ -25,18 +25,21 @@ router.get('/', function(req, res, next) {
 
 /* POST form to /addpost */
 router.post('/addpost', multipartMiddleware, function(req, res) {
+    req.body.title = req.body.title.replace(/<[^>]*>/g,'');
+    req.body.message = req.body.message.replace(/<[^>]*>/g,'');
+    
+    req.checkBody('title', 'Er was geen titel opgegeven.').notEmpty();
+    req.checkBody('message', 'Er was geen boodschap opgegeven.').notEmpty();
+    req.checkBody('date', 'Het datum veld was leeg.').notEmpty();   
+    
+    var errors = req.validationErrors();
+    
     var inputUserId = req.user.id;
     var inputName = req.user.displayName;
     var inputTitle = req.body.title;
     var inputMessage = req.body.message;
     var inputDate = req.body.date;
     var uploadFolder = "";
-    
-    req.checkBody('title', 'Title was empty.').notEmpty();
-    req.checkBody('message', 'Message was empty.').notEmpty();
-    req.checkBody('date', 'Date was empty.').notEmpty();  
-
-    var errors = req.validationErrors();
     
     if (errors) {
         req.flash('feedbackType', 'error');
@@ -50,12 +53,35 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
             case "image/gif":
             case "image/svg": 
                 uploadFolder = "uploads/images/";
-                uploadFile(res, req, req.files.file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
+                var newObject = new Post(
+                    {
+                        user_id : inputUserId,
+                        name : inputName,
+                        title: inputTitle,
+                        message : inputMessage,
+                        date : inputDate,
+                        asset: {
+                            src: uploadFolder + req.files.file.name
+                        }
+                    }
+                );
+                insertPost(newObject, req, res);
+                uploadFile(req.files.file, uploadFolder);
                 break; 
-            case "file/mp4":
-                uploadFolder = "uploads/video/";
-                uploadFile(res, req, req.files.file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
+            case "application/octet-stream":
+                var newObject = new Post(
+                    {
+                        user_id : inputUserId,
+                        name : inputName,
+                        title: inputTitle,
+                        message : inputMessage,
+                        date : inputDate
+                    }
+                );
+                insertPost(newObject, req, res);
+                break;
             default:
+                console.log(req.files.file)
                 req.flash('feedbackType', 'error');
                 req.flash('feedback', {msg: 'Uploaded file was not an image.'});
                 res.redirect("/#addevent");
@@ -64,37 +90,31 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     }
 });
 
-var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate) {
+var insertPost = function(newObject, req, res) {
+    newObject.save(function (err, data) {
+        if(err) {
+            res.send("There was a problem adding the information to the database." + err);
+        }
+        else {
+            req.flash('feedbackType', 'success');
+            req.flash('feedback', {msg: 'Message succesfully uploaded.'});
+            res.redirect("/#timeline");
+            io.emit('newObject', newObject);
+        }
+    });
+}
+
+var uploadFile = function(file, uploadFolder) {
     fs.readFile(file.path, function (err, data) {
-
-		var imageName = file.name;
-
-        var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
-        var newObject = new Post(
-            {
-                user_id : inputUserId,
-                name : inputName,
-                title: inputTitle,
-                message : inputMessage,
-                date : inputDate,
-                asset: {
-                    src: uploadFolder+imageName
-                }
-            });
-
-        fs.writeFile(newPath, data, function (err) {
-            newObject.save(function (err, data) {
-                if(err) {
-                    res.send("There was a problem adding the information to the database." + err);
-                }
-                else {
-                    req.flash('feedbackType', 'success');
-                    req.flash('feedback', {msg: 'Message succesfully uploaded.'});
-                    res.redirect("/#timeline");
-                    io.emit('newObject', newObject);
-                }
-            });
-        });
+        if(!err) {
+            var imageName = file.name;
+            var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
+            fs.writeFile(newPath, data, function (err) {
+                console.log(err);
+            });   
+        } else {
+            console.log(err);
+        }
 	});
 }
 
