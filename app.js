@@ -6,39 +6,29 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var config = require('./configuration/config');
+var fs = require('fs');
 
 var passport = require('passport');
-var FacebookStrategy = require('passport-facebook').Strategy;
 var session = require('express-session');
 var flash = require('connect-flash');
 
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/imd_timeline');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/imd_timeline');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var facebookRoutes = require('./routes/facebook');
+var adminRoutes = require('./routes/admin');
 
 var app = express();
 
-// Passport session setup.
 passport.serializeUser(function(user, done) {
-    done(null, user);
+  done(null, user);
 });
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
 });
-// Use the FacebookStrategy within Passport.
-passport.use(new FacebookStrategy({
-    clientID: config.facebook_api_key,
-    clientSecret: config.facebook_api_secret,
-    callbackURL: "http://localhost:3000/facebook/auth/facebook/callback"
-}, function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-        return done(null, profile);
-    });
-}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,13 +48,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
-
 app.use('/', routes);
 app.use('/facebook', facebookRoutes);
+app.use('/admin', adminRoutes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

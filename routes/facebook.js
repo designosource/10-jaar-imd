@@ -1,9 +1,21 @@
 var express = require('express');
 var router = express.Router();
 
+var config = require('../configuration/config');
+
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var session = require('express-session');
+
+passport.use(new FacebookStrategy({
+    clientID: config.facebook_api_key,
+    clientSecret: config.facebook_api_secret,
+    callbackURL: "http://localhost:3000/facebook/auth/facebook/callback"
+}, function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+        return done(null, profile);
+    });
+}));
 
 /* Facebook login */
 router.get('/auth/facebook', passport.authenticate('facebook'));
@@ -12,6 +24,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect : '/', 
     failureRedirect: '/login' 
 }), function(req, res) {
+        res.location('/');
         res.redirect('/');
     }
 );

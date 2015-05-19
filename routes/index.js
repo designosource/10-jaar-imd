@@ -7,14 +7,15 @@ var multipartMiddleware = multipart();
 
 var io = require('../io');
 
+var mongoose = require('mongoose');
+var Post = require('../models/posts');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    var db = req.db;
-    var collection = db.get('postcollection');
-    collection.find({},{},function(e,docs){
+    Post.find(function(err, posts){
         res.render('index', {
             title: "IMD's 10th Anniversary",
-            postlist : docs,
+            postlist : posts,
             user: req.user,
             feedbackType: req.flash('feedbackType'),
             feedback: req.flash('feedback')
@@ -24,9 +25,6 @@ router.get('/', function(req, res, next) {
 
 /* POST form to /addpost */
 router.post('/addpost', multipartMiddleware, function(req, res) {
-    var db = req.db;
-    var collection = db.get('postcollection');
-    
     var inputUserId = req.user.id;
     var inputName = req.user.displayName;
     var inputTitle = req.body.title;
@@ -43,24 +41,23 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     if (errors) {
         req.flash('feedbackType', 'error');
         req.flash('feedback', errors);
-        res.location("/");
         res.redirect("/#addevent");
+        console.log(errors);
     } else {
-        switch (req.files.image.type) {
+        switch (req.files.file.type) {
             case "image/png":
             case "image/jpeg":
             case "image/gif":
             case "image/svg": 
                 uploadFolder = "uploads/images/";
-                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
+                uploadFile(res, req, req.files.file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
                 break; 
             case "file/mp4":
                 uploadFolder = "uploads/video/";
-                uploadFile(res, req, req.files.image, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
+                uploadFile(res, req, req.files.file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate);
             default:
                 req.flash('feedbackType', 'error');
                 req.flash('feedback', {msg: 'Uploaded file was not an image.'});
-                res.location("/");
                 res.redirect("/#addevent");
                 break; 
         }
@@ -68,15 +65,12 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
 });
 
 var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, inputTitle, inputMessage, inputDate) {
-    var db = req.db;
-    var collection = db.get('postcollection');
-    
     fs.readFile(file.path, function (err, data) {
 
 		var imageName = file.name;
 
         var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
-        var newObject = 
+        var newObject = new Post(
             {
                 user_id : inputUserId,
                 name : inputName,
@@ -86,17 +80,16 @@ var uploadFile = function(res, req, file, uploadFolder, inputUserId, inputName, 
                 asset: {
                     src: uploadFolder+imageName
                 }
-            };
+            });
 
         fs.writeFile(newPath, data, function (err) {
-            collection.insert(newObject, function (err, doc) {
-                if (err) {
-                    res.send("There was a problem adding the information to the database.");
+            newObject.save(function (err, data) {
+                if(err) {
+                    res.send("There was a problem adding the information to the database." + err);
                 }
                 else {
                     req.flash('feedbackType', 'success');
                     req.flash('feedback', {msg: 'Message succesfully uploaded.'});
-                    res.location("/");
                     res.redirect("/#timeline");
                     io.emit('newObject', newObject);
                 }
