@@ -9,6 +9,17 @@ var mongoose = require('mongoose');
 var User = require('../models/users');
 var Post = require('../models/posts');
 
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+// used to deserialize the user
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
 passport.use('local', new LocalStrategy({ passReqToCallback : true},
     function(req, username, password, done) {
         User.findOne({ username: username }, function(err, user) {
