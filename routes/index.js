@@ -12,7 +12,7 @@ var Post = require('../models/posts');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    Post.find(function(err, posts){
+    Post.aggregate({ $sort : { date : 1} }, function(err, posts){
         res.render('index', {
             title: "IMD's 10th Anniversary",
             postlist : posts,
@@ -81,7 +81,6 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                 insertPost(newObject, req, res);
                 break;
             default:
-                console.log(req.files.file)
                 req.flash('feedbackType', 'error');
                 req.flash('feedback', {msg: 'Uploaded file was not an image.'});
                 res.redirect("/#addevent");

@@ -46,7 +46,7 @@ block content
                 p(class="date")="18/09/2005"
             each post, p in postlist
                 div(class="entry")
-                    if(post.asset.src) 
+                    if(post.asset) 
                         div(class="header", style="background-image:url(" + post.asset.src + ")")
                     div(class="content")
                         p(class="title")=post.title
@@ -72,10 +72,7 @@ block content
                         textarea(placeholder="Dit weet ik nog van mijn jaren in IMD ...", name="message")
                         input(type='file', name="file" id="file")
                         button(type="submit" class="button")="Submit"
-            
-
-   
-
+                        
     div(class="tickets", id="tickets")
         div(class="container")
             h2="Meer info"
@@ -89,9 +86,7 @@ block content
         div(class="container")
             a(target="_blank", href="http://designosource.be")
                 img(class="designo-logo", src="/images/designo.png", alt="Designosource")
-            
-                    
-                
+                     
     script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
     script(type="text/javascript", src="/javascripts/script.js")
@@ -99,7 +94,7 @@ block content
     script.
         var socket = io.connect('http://localhost:3000');
         socket.on('newObject', function (data) {
-            if(data.asset.src) {
+            if(data.asset) {
                 $('.timeline').append("<div class='entry'><div class='header' style='background-image:url(" + data.asset.src + ")'></div><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
             } else {
                 $('.timeline').append("<div class='entry'><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
