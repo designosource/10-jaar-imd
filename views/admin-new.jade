@@ -1,0 +1,54 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/flatlab/css/bootstrap.min.css', type="text/css")
+        link(rel='stylesheet', href='/flatlab/css/bootstrap-reset.css', type="text/css")
+        //external css
+        link(rel="stylesheet", href="/flatlab/assets/font-awesome/css/font-awesome.css", type="text/css")
+        //internal css
+        link(rel="stylesheet", href="/flatlab/css/style.css", type="text/css")
+        link(rel='stylesheet', href='/flatlab/css/style-responsive.css', type='text/css')
+    
+        meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+        //656252354403643
+    body
+        aside
+            div(id="sidebar", class="nav-collapse")
+                ul(class="sidebar-menu", id="nav-accordion")
+                    li
+                        a(href="/admin")
+                            i(class="fa fa-dashboard")
+                            span="Overzicht"
+                    li(class="active")
+                        a(href="/admin/new")
+                            i(class="fa fa-plus")
+                            span="Toevoegen"
+                    li
+                        a(href="/admin/delete")
+                            i(class="fa fa-times")
+                            span="Verwijderen"
+        section(id="main-content")
+            section(class="wrapper")
+                div(class="row")
+                    div(class="col-md-12")
+                        section(class="panel")
+                            div(class="panel-body")    
+                                form(role="form", action="/addpost", method="post", enctype="multipart/form-data")
+                                    div(class="form-group")
+                                        label(for="inputTitle")="Titel:"
+                                        input(class="form-control", type="text", name="title", id="inputTitle")
+                                    div(class="form-group")
+                                        label(for="datepicker")="Datum:"
+                                        input(id="datepicker", class="form-control", type="text", name="date")
+                                    div(class="form-group")
+                                        label(for="inputMessage")="Boodschap:"
+                                        textarea(class="form-control", type="text", name="message", id="inputMessage")
+                                    div(class="form-group")
+                                        label(for="inputFile")="Bestand:"
+                                        input(class="form-control", type="file", name="file", id="inputFile")
+                                    input(class="btn btn-info", type="submit", value="Submit")
+                                    
+        script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
+        script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
+        script(type="text/javascript", src="/javascripts/script.js")

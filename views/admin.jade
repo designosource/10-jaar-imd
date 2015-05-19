@@ -1,0 +1,47 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/flatlab/css/bootstrap.min.css', type="text/css")
+        link(rel='stylesheet', href='/flatlab/css/bootstrap-reset.css', type="text/css")
+        //external css
+        link(rel="stylesheet", href="/flatlab/assets/font-awesome/css/font-awesome.css", type="text/css")
+        //internal css
+        link(rel="stylesheet", href="/flatlab/css/style.css", type="text/css")
+        link(rel='stylesheet', href='/flatlab/css/style-responsive.css', type='text/css')
+    
+        meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    body
+        if(!user || user.group !== 'admin')
+            section(id="main-content")
+                section(class="wrapper")
+                    div(class="row")
+                        div(class="col-md-6")
+                            section(class="panel")
+                                div(class="panel-body")    
+                                    form(role="form", action="/admin/login", method="post")
+                                        div(class="form-group")
+                                            label(for="inputUsername")="Username:"
+                                            input(class="form-control", type="text", name="username", id="inputUsername")
+                                        div(class="form-group")
+                                            label(for="inputUsername")="Password:"
+                                            input(class="form-control", type="password", name="password", id="inputPassword")
+                                        input(class="btn btn-info", type="submit", value="Log In")
+        else 
+            aside
+                div(id="sidebar", class="nav-collapse")
+                    ul(class="sidebar-menu", id="nav-accordion")
+                        li(class="active")
+                            a(href="/admin")
+                                i(class="fa fa-dashboard")
+                                span="Overzicht"
+                        li
+                            a(href="/admin/new")
+                                i(class="fa fa-plus")
+                                span="Toevoegen"
+                        li
+                            a(href="/admin/delete")
+                                i(class="fa fa-times")
+                                span="Verwijderen"
+            section(id="main-content")
+                section(class="wrapper")
