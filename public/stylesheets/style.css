@@ -263,7 +263,6 @@ header {
 
 .entry {
   margin: 0 20px;
-  max-height: 500px;
   display: inline-block;
   vertical-align: top;
   font-size: 12px;
@@ -324,6 +323,12 @@ header {
       background-color: #333333;
       border: 0px;
       width: 30px; }
+      
+      ::-webkit-scrollbar {
+    height: 0px !important;
+    width: 0px !important;
+    display: none !important;
+}
 
 .entry:after {
   content: '\25BE';
