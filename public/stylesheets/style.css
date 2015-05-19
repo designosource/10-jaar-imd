@@ -89,6 +89,7 @@ header {
     display: none;
     margin-top: 60px;
     height: 40px;
+    margin-left: 15px;
     border: none; }
   header .tm-logo {
     margin-left: 30px; }
@@ -166,8 +167,6 @@ header {
     color: #ffffff; }
   .tickets h2 {
     margin-bottom: 15px; }
-  .tickets p {
-    margin-bottom: 30px; }
   .tickets .sm {
     color: #ffffff;
     text-decoration: none;
@@ -218,9 +217,13 @@ header {
         font-family: 'Josefin Sans', sans-serif; }
 
 /* !------------------ TIMELINE ------------------ */
+.timeline{
+  padding-bottom: 50px;
+  min-height: 50vh;
+}
 .timeline-div {
   background-color: #333333;
-  min-height: 100vh; }
+  }
   .timeline-div .filter {
     display: table;
     width: 100%;
@@ -237,8 +240,7 @@ header {
         padding: 10px 0;
         text-decoration: none; }
       .timeline-div .filter li.active a, .timeline-div .filter li:hover a {
-        color: #fc4d4d;
-        font-weight: 800; }
+        color: #fc4d4d;}
   .timeline-div .header {
     text-align: center;
     padding-top: 30px; }
@@ -261,6 +263,7 @@ header {
 
 .entry {
   margin: 0 20px;
+  max-height: 500px;
   display: inline-block;
   vertical-align: top;
   font-size: 12px;
@@ -311,7 +314,7 @@ header {
       margin-top: 15px; }
     .entry .content .message {
       white-space: pre-wrap;
-      overflow-x: visible;
+      overflow-x: hidden;
       padding: 15px 30px; }
     .entry .content .date {
       margin-bottom: 15px;
@@ -342,25 +345,32 @@ header {
   position: relative;
   top: 0px;
   left: 0; }
-
+.addevent{
+	background-color: #ffffff;
+}
 .addevent .container h2 {
   color: #fc4d4d;
   font-size: 20px;
   text-transform: uppercase;
   margin-bottom: 15px; }
 .addevent .container p {
-  color: #ffffff;
+  color:#333333;
   padding-bottom: 15px;
   max-width: 650px;
   margin: 0 auto; }
 .log{
-	color: #ffffff;
+	color: #333333;
+	display: block;
+}
+.log:hover{
+	text-decoration: none;
 }
 
 input, textarea{
 	width: 70%;
-	max-width: 70%;
+	max-width: 500px;
 	border: 0;
+	border: 1px solid #eaeaea;
 	display: block;
 	margin: 15px auto;
 	padding: 10px;
@@ -375,12 +385,14 @@ input:first-child{
 	margin-top: 30px;
 }
 input[type="file"]{
-	color: #ffffff;
-	max-width: 230px;
+	color: #333333;
+	max-width: 230px !important;
+	border: 0;
 }
 
 button{
 	background-color: #fc4d4d !important;
+	color: #ffffff;
 	border: 0;
 	padding: 7px 12px 5px 12px;
 }
@@ -391,11 +403,28 @@ button:hover{
     padding: 6px 11px 4px 11px;
 }
 
+.addevent .profielfoto{
+	border-radius: 100px;
+	width: 30px;
+	margin-right: 10px;
+}
+
+.addevent .naam, .addevent .log{
+	display: inline-block;
+	vertical-align: top;
+}
+
+.addevent .logout{
+	border-left: 1px solid #333333;
+	margin-left: 15px;
+	padding-left: 15px;
+}
+
 /* !------------------ FOOTER -------------------- */
 footer {
   background-color: #333333; }
   footer .container {
-    padding: 20px 0 15px 0; }
+    padding: 10px 0 5px 0; }
     footer .container a {
       color: #ffffff;
       text-decoration: none;
