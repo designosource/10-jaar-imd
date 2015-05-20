@@ -162,15 +162,15 @@ header {
 
 /* !------------------ TICKETS -------------------- */
 .tickets {
-  background-color: #ffffff; }
+  background-color: #fc4d4d; }
   .tickets p, .tickets h2 {
-    color: #333333; }
+    color: #ffffff; }
   .tickets h2 {
     margin-bottom: 15px; }
   .tickets .sm {
-    color: #333333;
+    color: #ffffff;
     text-decoration: none;
-    border-bottom: 1px dotted #333333; }
+    border-bottom: 1px dotted #ffffff; }
     .tickets .sm:hover {
       border: none; }
   .tickets .combi {
@@ -428,7 +428,7 @@ button:hover{
 
 /* !------------------ FOOTER -------------------- */
 footer {
-  background-color: #fc4d4d; }
+  background-color: #333333; }
   footer .container {
     padding: 10px 0 5px 0; }
     footer .container a {
