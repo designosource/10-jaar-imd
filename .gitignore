@@ -1,5 +1,4 @@
 node_modules
-configuration/config.js
 data/*
 public/uploads/images/*
 public/uploads/video/*
