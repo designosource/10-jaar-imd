@@ -1,5 +1,12 @@
 $('#datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
 
+$('#check-it-out').on('click', function(event) {
+    event.preventDefault();
+    
+    var timeline = $("#timeline").offset().top;
+    $('body').animate({scrollTop: timeline}, 800);
+});
+
 $('.filter li').on('click', function(event) {
     event.preventDefault();
     var value = $(this).children('a').text();
