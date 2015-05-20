@@ -55,6 +55,22 @@ block content
                         p(class="message")=post.message
                         img(class="profielfoto", src="https://graph.facebook.com/"+ post.user_id +"/picture")
                         p(class="naam")=post.name
+        div(class="addevent", id="addevent")
+            div(class="container")
+                h2="Voeg een gebeurtenis toe"
+                p="Was jij ooit ook een student Interactive Multimedia Design en heb je de beginjaren meegemaakt, dan kan je je hoogstwaarschijnlijk nog een leuke anekdote herinneren. Door die gebeurtenis toe te voegen aan de tijdlijn, haal je samen met ons leuke herinneringen boven."
+                if(!user || user.group == 'admin')
+                    a(class="log login", href="/facebook/auth/facebook")='Log in'
+                else if(user.provider == 'facebook')
+                    img(class="profielfoto", src="https://graph.facebook.com/"+ user.id +"/picture")
+                    p(class="naam")=user.displayName  
+                    a(class="log logout", href="/facebook/logout")='Log out'           
+                    form(id="addPostForm",name="addpost",method="post",action="/addpost",enctype="multipart/form-data")
+                        input(type="text", placeholder="Titel", name="title")
+                        input(id="datepicker", type="text", placeholder="Datum", name="date")
+                        textarea(placeholder="Dit weet ik nog van mijn jaren in IMD ...", name="message")
+                        input(type='file', name="file" id="file")
+                        button(type="submit" class="button")="Submit"
                         
     div(class="tickets", id="tickets")
         div(class="container")
