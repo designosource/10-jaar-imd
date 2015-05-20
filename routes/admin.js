@@ -90,7 +90,7 @@ router.post('/login',
         id="656252354403643";
         displayName = "WeAreIMD";
         email = "weareimd";
-        password = "uniekdigitaalverhaal";
+        password = "awesomeunicorn";
         group = "admin";
         // asynchronous
         // User.findOne wont fire unless data is sent back

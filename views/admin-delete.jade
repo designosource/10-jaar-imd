@@ -53,7 +53,7 @@ html
                                     each post, p in postlist
                                         tr
                                             td=post.name
-                                            td=post.date
+                                            td=post.date.getDate() + '-' + (post.date.getMonth() + 1) + '-' + post.date.getFullYear()
                                             td=post.title
                                             td(class="post-id")=post._id
                                             td

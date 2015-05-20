@@ -6,7 +6,7 @@ var postsSchema = new Schema({
     name : String,
     title: String,
     message : String,
-    date : String,
+    date : Date,
     asset: {
         src: String
     }

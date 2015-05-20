@@ -13,12 +13,13 @@ var Post = require('../models/posts');
 
 router.get('/', function(req, res, next) {
     Post.aggregate({ $sort : { date : 1} }, function(err, posts){
+        for(var i = 0; i < posts.length; i++) {
+            posts[i].date = (posts[i].date.getDate() + '-' + (posts[i].date.getMonth() + 1) + '-' + posts[i].date.getFullYear());
+        }
         res.render('index', {
             title: "IMD's 10th Anniversary",
             postlist : posts,
-            user: req.user,
-            feedbackType: req.flash('feedbackType'),
-            feedback: req.flash('feedback')
+            user: req.user
         });
     });
 });
@@ -67,13 +68,16 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     var inputName = req.user.displayName;
     var inputTitle = req.body.title;
     var inputMessage = req.body.message;
-    var inputDate = req.body.date;
+    var inputDate = new Date(req.body.date.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+    var inputTimestamp = Date.now();
     var uploadFolder = "";
     
     if (errors) {
-        req.flash('feedbackType', 'error');
-        req.flash('feedback', errors);
-        res.redirect("/#addevent");
+        if(req.user.group === 'admin') {
+            res.redirect("/admin/new");
+        } else {
+            res.redirect("/#addevent");
+        }
         console.log(errors);
     } else {
         switch (req.files.file.type) {
@@ -90,12 +94,12 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                         message : inputMessage,
                         date : inputDate,
                         asset: {
-                            src: uploadFolder + req.files.file.name
+                            src: uploadFolder + inputTimestamp + "-" + req.files.file.name
                         }
                     }
                 );
                 insertPost(newObject, req, res);
-                uploadFile(req.files.file, uploadFolder);
+                uploadFile(req.files.file, uploadFolder, inputTimestamp);
                 break; 
             case "application/octet-stream":
                 var newObject = new Post(
@@ -110,9 +114,11 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                 insertPost(newObject, req, res);
                 break;
             default:
-                req.flash('feedbackType', 'error');
-                req.flash('feedback', {msg: 'Uploaded file was not an image.'});
-                res.redirect("/#addevent");
+                if(req.user.group === 'admin') {
+                    res.redirect("/admin/new");
+                } else {
+                    res.redirect("/#addevent");
+                }
                 break; 
         }
     }
@@ -124,19 +130,17 @@ var insertPost = function(newObject, req, res) {
             res.send("There was a problem adding the information to the database." + err);
         }
         else {
-            req.flash('feedbackType', 'success');
-            req.flash('feedback', {msg: 'Message succesfully uploaded.'});
             res.redirect("/#timeline");
             io.emit('newObject', newObject);
         }
     });
 }
 
-var uploadFile = function(file, uploadFolder) {
+var uploadFile = function(file, uploadFolder, inputTimestamp) {
     fs.readFile(file.path, function (err, data) {
         if(!err) {
             var imageName = file.name;
-            var newPath = __dirname + "/../public/" + uploadFolder + imageName;
+            var newPath = __dirname + "/../public/" + uploadFolder + inputTimestamp + "-" + imageName;
             fs.writeFile(newPath, data, function (err) {
                 console.log(err);
             });   
