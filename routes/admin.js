@@ -51,7 +51,9 @@ router.get('/new', function(req, res, next) {
             res.render('admin-new', {
                 title: "Toevoegen | Admin",
                 user: req.user,
-                postlist: posts
+                postlist: posts,
+                success: req.flash('successMessage'),
+                error: req.flash('errorMessage')
             });
         });   
     } else {
@@ -65,7 +67,9 @@ router.get('/delete', function(req, res, next) {
             res.render('admin-delete', {
                 title: "Verwijderen | Admin",
                 user: req.user,
-                postlist: posts
+                postlist: posts,
+                success: req.flash('successMessage'),
+                error: req.flash('errorMessage')
             });
         });   
     } else {
@@ -84,59 +88,5 @@ router.post('/login',
                 failureRedirect: '/admin',
                 failureFlash: true })
 );
-
-/*passport.use('local-signup', new LocalStrategy({passReqToCallback : true},
-    function(req, id, displayName, email, password, group, done) {
-        id="656252354403643";
-        displayName = "WeAreIMD";
-        email = "weareimd";
-        password = "awesomeunicorn";
-        group = "admin";
-        // asynchronous
-        // User.findOne wont fire unless data is sent back
-        process.nextTick(function() {
-
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({ 'username' :  email }, function(err, user) {
-            // if there are any errors, return the error
-            if (err)
-                return done(err);
-
-            // check to see if theres already a user with that email
-            if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            } else {
-
-                // if there is no user with that email
-                // create the user
-                var newUser            = new User();
-
-                // set the user's local credentials
-                newUser.id = id;
-                newUser.displayName = displayName;
-                newUser.username   = email;
-                newUser.password = newUser.generateHash(password);
-                newUser.group = group;
-
-                // save the user
-                newUser.save(function(err) {
-                    if (err)
-                        throw err;
-                    return done(null, newUser);
-                });
-            }
-
-        });    
-
-        });
-}));
-
-router.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true// allow flash messages
-}));*/
-
 
 module.exports = router;

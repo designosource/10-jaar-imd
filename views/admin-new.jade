@@ -11,7 +11,6 @@ html
         link(rel='stylesheet', href='/flatlab/css/style-responsive.css', type='text/css')
     
         meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
-        //656252354403643
     body
         aside
             div(id="sidebar", class="nav-collapse")
@@ -31,9 +30,15 @@ html
         section(id="main-content")
             section(class="wrapper")
                 div(class="row")
-                    div(class="col-md-12")
+                    div(class="col-md-6 col-md-offset-2")
+                        if(error)
+                            each err, e in error
+                                p(class="alert alert-danger")=err.msg
+                        if(success)
+                            each suc, s in success
+                                p(class="alert alert-success")=suc.msg
                         section(class="panel")
-                            div(class="panel-body")    
+                            div(class="panel-body")  
                                 form(role="form", action="/addpost", method="post", enctype="multipart/form-data")
                                     div(class="form-group")
                                         label(for="inputTitle")="Titel:"

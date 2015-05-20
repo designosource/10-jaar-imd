@@ -13,7 +13,8 @@ var session = require('express-session');
 var flash = require('connect-flash');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://' + config.mongodb_user + ':' + config.mongodb_password + '@ds029630.mongolab.com:29630/imd_timeline');
+mongoose.connect('mongodb://' + config.mongodb_user + ':' + config.mongodb_password +'@ds029630.mongolab.com:29630/imd_timeline');
+//mongoose.connect('mongodb://localhost/imd_timeline');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');

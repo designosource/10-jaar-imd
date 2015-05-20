@@ -162,15 +162,15 @@ header {
 
 /* !------------------ TICKETS -------------------- */
 .tickets {
-  background-color: #fc4d4d; }
+  background-color: #ffffff; }
   .tickets p, .tickets h2 {
-    color: #ffffff; }
+    color: #333333; }
   .tickets h2 {
     margin-bottom: 15px; }
   .tickets .sm {
-    color: #ffffff;
+    color: #333333;
     text-decoration: none;
-    border-bottom: 1px dotted #ffffff; }
+    border-bottom: 1px dotted #333333; }
     .tickets .sm:hover {
       border: none; }
   .tickets .combi {
@@ -223,6 +223,7 @@ header {
 }
 .timeline-div {
   background-color: #333333;
+    padding-bottom: 60px;
   }
   .timeline-div .filter {
     display: table;
@@ -427,13 +428,12 @@ button:hover{
 
 /* !------------------ FOOTER -------------------- */
 footer {
-  background-color: #333333; }
+  background-color: #fc4d4d; }
   footer .container {
     padding: 10px 0 5px 0; }
     footer .container a {
       color: #ffffff;
-      text-decoration: none;
-      border-bottom: 1px dotted #333333; }
+      text-decoration: none;}
       footer .container a:hover {
         border: none; }
       footer .container a .designo-logo {

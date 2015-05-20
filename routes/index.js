@@ -19,7 +19,9 @@ router.get('/', function(req, res, next) {
         res.render('index', {
             title: "IMD's 10th Anniversary",
             postlist : posts,
-            user: req.user
+            user: req.user,
+            success: req.flash('successMessage'),
+            error: req.flash('errorMessage')
         });
     });
 });
@@ -37,7 +39,7 @@ router.post('/deletepost', function(req, res) {
                         if (err) {
                             console.log(err);
                         } else {
-                            res.send('Post and image successfully deleted.');
+                            res.send('De post is succesvol gedeletet.');
                         }
                     });
                 }
@@ -47,7 +49,7 @@ router.post('/deletepost', function(req, res) {
                 if (err) {
                     console.log(err);
                 } else {
-                    res.send('Post successfully deleted.');
+                    res.send('De post is succesvol gedeletet.');
                 }
             });
         }
@@ -73,6 +75,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     var uploadFolder = "";
     
     if (errors) {
+        req.flash('errorMessage', errors);
         if(req.user.group === 'admin') {
             res.redirect("/admin/new");
         } else {
@@ -114,6 +117,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                 insertPost(newObject, req, res);
                 break;
             default:
+                req.flash('errorMessage', {msg: 'De geüploade file was geen geldige afbeelding.'});
                 if(req.user.group === 'admin') {
                     res.redirect("/admin/new");
                 } else {
@@ -130,7 +134,12 @@ var insertPost = function(newObject, req, res) {
             res.send("There was a problem adding the information to the database." + err);
         }
         else {
-            res.redirect("/#timeline");
+            req.flash('successMessage', {msg: 'De post is succesvol geüpload.'});
+            if(req.user.group === 'admin') {
+                res.redirect("/admin/new");
+            } else {
+                res.redirect("/#timeline");
+            }
             io.emit('newObject', newObject);
         }
     });
