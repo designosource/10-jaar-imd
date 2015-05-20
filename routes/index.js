@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
             posts[i].date = (posts[i].date.getDate() + '-' + (posts[i].date.getMonth() + 1) + '-' + posts[i].date.getFullYear());
         }
         res.render('index', {
-            title: "IMD's 10th Anniversary",
+            title: "De Jubilee van IMD",
             postlist : posts,
             user: req.user,
             success: req.flash('successMessage'),
