@@ -55,7 +55,24 @@ html
                                             td=post.name
                                             td=post.date
                                             td=post.title
-                                            td=post._id
+                                            td(class="post-id")=post._id
                                             td
-                                                button(class="btn btn-danger btn-xs")
+                                                button(class="btn btn-danger btn-xs delete")
                                                     i(class="fa fa-trash-o ")
+    script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
+    script.
+        $('.delete').on('click', function(){
+            var postId = $(this).parent().siblings('.post-id').text();
+            var post = $(this).parent().parent();
+            
+            $.ajax({
+                type: "POST",
+                url: '/deletepost',
+                data: {data: postId},
+                success: function(data) {
+                    post.remove();
+                    console.log(data);
+                }
+            });
+        });
+        

@@ -10,7 +10,7 @@ var io = require('../io');
 var mongoose = require('mongoose');
 var Post = require('../models/posts');
 
-/* GET home page. */
+
 router.get('/', function(req, res, next) {
     Post.aggregate({ $sort : { date : 1} }, function(err, posts){
         res.render('index', {
@@ -23,7 +23,36 @@ router.get('/', function(req, res, next) {
     });
 });
 
-/* POST form to /addpost */
+router.post('/deletepost', function(req, res) {
+    var postId = req.body.data;
+    
+    Post.findOne({ _id: postId}, { asset: 1 }, function(err, post) {
+        if(post.asset.src){
+            fs.unlink(__dirname + "/../public/" + post.asset.src, function (err) {
+                if(err) {
+                    console.log(err); 
+                } else {
+                    Post.remove({_id: postId}, function (err) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            res.send('Post and image successfully deleted.');
+                        }
+                    });
+                }
+            });
+        } else {
+            Post.remove({_id: postId}, function (err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send('Post successfully deleted.');
+                }
+            });
+        }
+    });
+});
+
 router.post('/addpost', multipartMiddleware, function(req, res) {
     req.body.title = req.body.title.replace(/<[^>]*>/g,'');
     req.body.message = req.body.message.replace(/<[^>]*>/g,'');
@@ -107,7 +136,7 @@ var uploadFile = function(file, uploadFolder) {
     fs.readFile(file.path, function (err, data) {
         if(!err) {
             var imageName = file.name;
-            var newPath = __dirname + "/../public/"+ uploadFolder + imageName;
+            var newPath = __dirname + "/../public/" + uploadFolder + imageName;
             fs.writeFile(newPath, data, function (err) {
                 console.log(err);
             });   
