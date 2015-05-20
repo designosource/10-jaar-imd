@@ -18,7 +18,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
     clientSecret: config.facebook_api_secret,
-    callbackURL: "http://localhost:3000/facebook/auth/facebook/callback"
+    callbackURL: "/facebook/auth/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
         return done(null, profile);
