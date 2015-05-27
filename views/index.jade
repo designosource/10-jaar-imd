@@ -104,7 +104,8 @@ block content
             parent.append(items);
         }
         
-        var socket = io.connect('http://localhost:3000');
+        //var socket = io.connect('http://localhost:3000');
+        var socket = io.connect('http://jubilee-imd.herokuapp.com/');
         socket.on('newObject', function (data) {
             var dateClass = data.date.substr(data.date.length - 4);
             if(data.asset) {
