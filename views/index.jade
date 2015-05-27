@@ -47,7 +47,7 @@ block content
             each post, p in postlist
                 div(class="entry " + post.date.substr(post.date.length - 4))
                     if(post.asset) 
-                        div(class="header", style="background-image:url(" + post.asset.src + ")")
+                        div(class="header", style="background-image:url(data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64') + ")")
                     div(class="content")
                         p(class="title")=post.title
                         p(class="date")=post.date
@@ -90,12 +90,27 @@ block content
     script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
     script(type="text/javascript", src="/javascripts/script.js")
     script(type="text/javascript", src="/socket.io/socket.io.js")
-    //script.
+    script.
+        function sortTimeline(parent, childSelector, keySelector) {
+            var items = parent.children(childSelector).sort(function(a, b) {
+                var vA = $(keySelector, a).text();
+                vA = vA.split('-');
+                vA = new Date(vA[2], vA[1] -1, vA[0]);
+                var vB = $(keySelector, b).text();
+                vB = vB.split('-');
+                vB = new Date(vB[2], vB[1] -1, vB[0]);
+                return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
+            });
+            parent.append(items);
+        }
+        
         var socket = io.connect('http://localhost:3000');
         socket.on('newObject', function (data) {
+            var dateClass = data.date.substr(data.date.length - 4);
             if(data.asset) {
-                $('.timeline').append("<div class='entry'><div class='header' style='background-image:url(" + data.asset.src + ")'></div><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
+                $('.timeline').append("<div class='entry " + dateClass + "'><div class='header' style='background-image:url(data:" + data.asset.content_type + ";base64," + data.asset.base + ")'></div><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
             } else {
-                $('.timeline').append("<div class='entry'><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
+                $('.timeline').append("<div class='entry " + dateClass + "'><div class='content'><p class='title'>" + data.title + "</p><p class='date'>" + data.date + "</p><hr><p class='message'>" + data.message + "</p><img class='profielfoto' src='https://graph.facebook.com/" + data.user_id + "/picture'><p class='naam'>" + data.name + "</p></div></div>");
             }
+            sortTimeline($('.timeline'), ".entry", 'p.date');
         });

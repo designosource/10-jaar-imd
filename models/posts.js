@@ -7,8 +7,9 @@ var postsSchema = new Schema({
     title: String,
     message : String,
     date : Date,
-    asset: {
-        src: String
+    asset : {
+        base : { type : Buffer },
+        content_type : { type : String }
     }
 });
 

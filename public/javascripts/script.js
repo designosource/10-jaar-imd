@@ -1,4 +1,7 @@
-$('#datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
+if($('#datepicker')) {
+    $('#datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
+    $('#datepicker').val($.datepicker.formatDate('dd-mm-yy', new Date()));
+}
 
 $('#check-it-out').on('click', function(event) {
     event.preventDefault();
