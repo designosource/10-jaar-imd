@@ -93,8 +93,6 @@ block content
     script(type="text/javascript", src="/javascripts/script.js")
     script(type="text/javascript", src="/socket.io/socket.io.js")
     script.
-        $(".fancybox").fancybox();
-        
         function sortTimeline(parent, childSelector, keySelector) {
             var items = parent.children(childSelector).sort(function(a, b) {
                 var vA = $(keySelector, a).text();

@@ -3,6 +3,8 @@ if($('#datepicker')) {
     $('#datepicker').val($.datepicker.formatDate('dd-mm-yy', new Date()));
 }
 
+$(".fancybox").fancybox();
+
 $('#check-it-out').on('click', function(event) {
     event.preventDefault();
     
