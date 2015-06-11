@@ -71,6 +71,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
                 lwip.open(req.files.file.path, function(err, image){
                     var filename = req.files.file.originalFilename;
                     var type = filename.substr(filename.length - 3);
+                    type = type.toLowerCase();
                     var width = image.width();
                     var wRatio = 500 / width;
                     image.scale(wRatio, function(err, image){
