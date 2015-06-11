@@ -47,7 +47,7 @@ block content
             each post, p in postlist
                 div(class="entry " + post.date.substr(post.date.length - 4))
                     if(post.asset) 
-                        a(href="data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64'), data-lightbox="timeline", data-title=post.title)
+                        a(href="data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64'), class="fancybox")
                             div(class="header", style="background-image:url(data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64') + ")")
                     div(class="content")
                         p(class="title")=post.title
@@ -89,10 +89,12 @@ block content
                      
     script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
-    script(type="text/javascript", src="/lightbox/js/lightbox.min.js")
+    script(type="text/javascript", src="/fancybox/source/jquery.fancybox.pack.js?v=2.1.5")
     script(type="text/javascript", src="/javascripts/script.js")
     script(type="text/javascript", src="/socket.io/socket.io.js")
     script.
+        $(".fancybox").fancybox();
+        
         function sortTimeline(parent, childSelector, keySelector) {
             var items = parent.children(childSelector).sort(function(a, b) {
                 var vA = $(keySelector, a).text();
@@ -106,7 +108,6 @@ block content
             parent.append(items);
         }
         
-        //var socket = io.connect('http://localhost:3000');
         var socket = io.connect('http://jubilee-imd.herokuapp.com/');
         socket.on('newObject', function (data) {
             var dateClass = data.date.substr(data.date.length - 4);
