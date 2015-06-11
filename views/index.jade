@@ -47,7 +47,8 @@ block content
             each post, p in postlist
                 div(class="entry " + post.date.substr(post.date.length - 4))
                     if(post.asset) 
-                        div(class="header", style="background-image:url(data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64') + ")")
+                        a(href="data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64'), data-lightbox="timeline", data-title=post.title)
+                            div(class="header", style="background-image:url(data:" + post.asset.content_type + ";base64," + post.asset.base.toString('base64') + ")")
                     div(class="content")
                         p(class="title")=post.title
                         p(class="date")=post.date
@@ -88,6 +89,7 @@ block content
                      
     script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     script(type="text/javascript", src="/javascripts/jquery-ui.min.js")
+    script(type="text/javascript", src="/lightbox/js/lightbox.min.js")
     script(type="text/javascript", src="/javascripts/script.js")
     script(type="text/javascript", src="/socket.io/socket.io.js")
     script.
