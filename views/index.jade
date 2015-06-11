@@ -43,7 +43,7 @@ block content
         div(class="timeline")
             div(class="entry first")
                 p(class="title")="A baby was born!"
-                p(class="date")="18/09/2005"
+                p(class="date")="18-09-2005"
             each post, p in postlist
                 div(class="entry " + post.date.substr(post.date.length - 4))
                     if(post.asset) 
