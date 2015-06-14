@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var config = require('./configuration/config');
 var fs = require('fs');
+var moment = require('moment');
 
 var passport = require('passport');
 var session = require('express-session');
@@ -14,7 +15,6 @@ var flash = require('connect-flash');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://' + config.mongodb_user + ':' + config.mongodb_password +'@ds029630.mongolab.com:29630/imd_timeline');
-//mongoose.connect('mongodb://localhost/imd_timeline');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -36,7 +36,16 @@ app.use(flash());
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(expressValidator());
+app.use(expressValidator({
+    customValidators: {
+        isDate: function(param) {
+            return new Date(param);
+        },
+        checkDate: function(param) {
+            return new Date(param.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) <= new Date();
+        }
+    }
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

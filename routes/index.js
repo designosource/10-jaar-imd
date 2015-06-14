@@ -46,7 +46,7 @@ router.post('/addpost', multipartMiddleware, function(req, res) {
     
     req.checkBody('title', 'Er was geen titel opgegeven.').notEmpty();
     req.checkBody('message', 'Er was geen boodschap opgegeven.').notEmpty();
-    req.checkBody('date', 'Het datum veld was leeg.').notEmpty();   
+    req.checkBody('date', 'Er is een ongeldige datum opgegeven.').notEmpty().isDate().checkDate();  
     
     var errors = req.validationErrors();
     
