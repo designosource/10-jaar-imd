@@ -38,7 +38,7 @@ passport.use('local', new LocalStrategy({ passReqToCallback : true},
 router.get('/', function(req, res, next) {
     Post.find(function(err, posts){
         res.render('admin', {
-            title: "Overzicht | Admin",
+            title: "Overzicht | Admin IMD Alumni",
             user: req.user,
             postlist: posts
         });
@@ -49,7 +49,7 @@ router.get('/new', function(req, res, next) {
     if(req.user && req.user.group == 'admin') {
         Post.find(function(err, posts){
             res.render('admin-new', {
-                title: "Toevoegen | Admin",
+                title: "Toevoegen | Admin IMD Alumni",
                 user: req.user,
                 postlist: posts,
                 success: req.flash('successMessage'),
@@ -65,7 +65,7 @@ router.get('/delete', function(req, res, next) {
     if(req.user && req.user.group == 'admin') {
         Post.find(function(err, posts){
             res.render('admin-delete', {
-                title: "Verwijderen | Admin",
+                title: "Verwijderen | Admin IMD Alumni",
                 user: req.user,
                 postlist: posts,
                 success: req.flash('successMessage'),

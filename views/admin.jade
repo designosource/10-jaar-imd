@@ -1,7 +1,10 @@
 doctype html
 html
     head
-        title= title
+        if(!user || user.group !== 'admin')
+            title="Login | Admin IMD Alumni"
+        else
+            title=title
         link(rel='stylesheet', href='/flatlab/css/bootstrap.min.css', type="text/css")
         link(rel='stylesheet', href='/flatlab/css/bootstrap-reset.css', type="text/css")
         //external css

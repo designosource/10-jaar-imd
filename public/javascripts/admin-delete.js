@@ -9,7 +9,7 @@ $(document).ready(function() {
             data: {data: postId},
             success: function(data) {
                 post.remove();
-                $('#posts-wrapper').prepend("<p class='alert alert-success'>" + data + "</p>");
+                $('#feedback').html("<p class='alert alert-success'>" + data + "</p>");
             }
         });
     });
