@@ -5,6 +5,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 
+var moment = require('moment');
+
 var mongoose = require('mongoose');
 var User = require('../models/users');
 var Post = require('../models/posts');
@@ -36,11 +38,17 @@ passport.use('local', new LocalStrategy({ passReqToCallback : true},
 ));
 
 router.get('/', function(req, res, next) {
-    Post.find(function(err, posts){
-        res.render('admin', {
-            title: "Overzicht | Admin IMD Alumni",
-            user: req.user,
-            postlist: posts
+    Post.aggregate({ $sort : { date : 1} }, function(err, posts){
+        Post.aggregate({ $sort : { _id : -1 } }, function(err, lastpost){
+            for(var i = 0; i < posts.length; i++) {
+                posts[i].date = moment(posts[i].date).format('DD-MM-YYYY');
+            }
+            res.render('admin', {
+                title: "Overzicht | Admin IMD Alumni",
+                user: req.user,
+                postlist: posts,
+                lastpost: lastpost[0]
+            });
         });
     });
 });
@@ -63,7 +71,10 @@ router.get('/new', function(req, res, next) {
 
 router.get('/delete', function(req, res, next) {
     if(req.user && req.user.group == 'admin') {
-        Post.find(function(err, posts){
+        Post.aggregate({ $sort : { _id : -1} }, function(err, posts){
+            for(var i = 0; i < posts.length; i++) {
+                posts[i].date = moment(posts[i].date).format('DD-MM-YYYY');
+            }
             res.render('admin-delete', {
                 title: "Verwijderen | Admin IMD Alumni",
                 user: req.user,

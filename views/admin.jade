@@ -48,3 +48,45 @@ html
                                 span="Verwijderen"
             section(id="main-content")
                 section(class="wrapper")
+                    div(class="row state-overview")
+                        div(class="col-lg-6 col-sm-12")
+                            section(class="panel")
+                                div(class="symbol red")
+                                    i(class="fa fa-file-text-o")
+                                div(class="value")
+                                    h1(class="count")=postlist.length
+                                    p="Totaal"
+                        div(class="col-lg-6 col-sm-12")
+                            section(class="panel")
+                                div(class="symbol yellow")
+                                    i(class="fa fa-star-o")
+                                div(class="value")
+                                    h5(class="count")=lastpost.title
+                                    p="Laatst toegevoegd"
+                    div(class="row")
+                        div(class="col-md-12", id="posts-wrapper")
+                            section(class="panel")
+                                    header(class="panel-heading")="Posts - cronologische volgorde"
+                                    table(class="table table-striped table-advance table-hover")
+                                        thead
+                                            tr
+                                                th
+                                                    i(class="fa fa-user")
+                                                    |  Naam
+                                                th
+                                                    i(class="fa fa-calendar-o")
+                                                    |  Date
+                                                th
+                                                    i(class="fa fa-file-text-o")
+                                                    |  Titel
+                                                th
+                                                    i(class="fa fa-android")
+                                                    |  Post-ID
+                                                th
+                                        tbody
+                                            each post, p in postlist
+                                                tr
+                                                    td=post.name
+                                                    td=post.date
+                                                    td=post.title
+                                                    td(class="post-id")=post._id
