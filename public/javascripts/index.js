@@ -12,7 +12,7 @@ $(document).ready(function() {
     
     $('#check-it-out').on('click', function() {
         var timeline = $("#timeline").offset().top;
-        $('body').animate({scrollTop: timeline}, 800);
+        $('html, body').animate({scrollTop: timeline}, 800);
         return false;
     });
 
