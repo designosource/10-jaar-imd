@@ -64,7 +64,8 @@ p, a, .prijzen li {
   .button:hover, .combi:hover {
     background: transparent;
     border: 3px solid; 
-    padding: 6px 11px 4px 11px;}
+    padding: 6px 11px 4px 11px;
+  }
 
 .cf {
   *zoom: 1; }
@@ -80,6 +81,7 @@ header {
   background-image: url(../images/gym.png);
   background-image: linear-gradient(transparent, transparent), url(../images/gym.svg);
   background-size: cover;
+  position: relative;
   background-position-x: -50px;
   height: 100vh;
   text-shadow: 1px 1px 1px #838a51; }
@@ -118,6 +120,7 @@ header {
     header .button:hover {
       border-color: #ffffff;
       color: #ffffff; }
+
 
 /* !------------------ ABOUT -------------------- */
 .about .col3:first-child {
@@ -162,7 +165,8 @@ header {
 
 /* !------------------ TICKETS -------------------- */
 .tickets {
-  background-color: #fc4d4d; }
+  background-color: #fc4d4d;
+display: none;}
   .tickets p, .tickets h2 {
     color: #ffffff; }
   .tickets h2 {
@@ -424,6 +428,14 @@ button:hover{
 	margin-left: 15px;
 	padding-left: 15px;
 }
+.delete2 {
+    margin-top: 140px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+}
+
 
 /* !------------------ FOOTER -------------------- */
 footer {
@@ -440,3 +452,13 @@ footer {
         border-bottom: 0px !important; }
       footer .container a.designo {
         border-bottom: 0px !important; }
+.marginleft {
+    margin-left: 15px;
+}.marginright {
+  margin-right: 15px;
+}
+
+.button, buttonsmidden{
+    margin-left: 15px;
+    margin-right: 15px;
+}

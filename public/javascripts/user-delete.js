@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $('.delete').on('click', function(){
-        var postId = $(this).parent().siblings('.post-id').text();
+    $('.delete2').on('click', function(){
+        var postId = $(this).siblings('.post-id')[0].value;
         var post = $(this).parent().parent();
         console.log("clicked", $(this));
         console.log("id", postId);

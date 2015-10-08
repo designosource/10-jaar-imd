@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     header
         div(class="v-center-outer")
             div(class="v-center")
@@ -9,7 +10,9 @@ block content
                         h1=title
                         h2="Let's celebrate: IMD's 10th anniversary!"
                         p="In oktober 2015 bestaat onze opleiding Interactive Multimedia Design 10 jaar en dat willen we graag samen met jou vieren. Dat doen we op do. 29 oktober met een groot feest, maar vereeuwig intussen je IMD-herinneringen en -creaties op de digitale tijdlijn van je favoriete opleiding!"
-                        a(class="button", id="check-it-out", href="#timeline")="Check it out"
+                        p(class="buttonsmidden")
+                            a(class="button", id="check-it-out", href="#timeline")="Check it out"
+                            a(class="button", id="check-it-out", href="https://www.eventbrite.nl/e/tickets-jubilee-imd-imdjubilee-18844727086?utm-medium=discovery&utm-campaign=social&utm-content=attendeeshare&aff=esfb&utm-source=fb&utm-term=listing")="Inschrijven"
                         br
                         a(target="_blank", href="http://weareimd.be")
                             img(class="imd-logo", src="/images/imd.png", alt="Interactive Multimedia Design")
@@ -34,6 +37,22 @@ block content
                         p(class="message")=post.message
                         img(class="profielfoto", src="https://graph.facebook.com/"+ post.user_id +"/picture")
                         p(class="naam")=post.name
+                        input(type='hidden' class='post-id' value=post._id)
+                        if(user != undefined && post.user_id == user.id) 
+                            button(class="btn btn-danger btn-xs delete2")="Verwijder event"
+                script.
+                    i = "#{p}";
+                    len = "#{postlist.length}";
+                    console.log(i,len);
+                    if(i == len-1){
+                        console.log("last");
+                        $.getScript( "/javascripts/user-delete.js", function( data, textStatus, jqxhr ) {
+                          console.log( data ); // Data returned
+                          console.log( textStatus ); // Success
+                          console.log( jqxhr.status ); // 200
+                          console.log( "Load was performed." );
+                        });
+                    }
         div(class="addevent", id="addevent")
             div(class="container")
                 h2="Voeg een gebeurtenis toe"
@@ -65,7 +84,6 @@ block content
             a(target="_blank", href="http://designosource.be")
                 img(class="designo-logo", src="/images/designo.png", alt="Designosource")
                      
-    script(type="text/javascript", src="/javascripts/jquery-latest.min.js")
     script(type="text/javascript", src="/flatlab/js/bootstrap-datepicker.js")
     script(type="text/javascript", src="/fancybox/source/jquery.fancybox.pack.js?v=2.1.5")
     script(type="text/javascript", src="/javascripts/common.js")

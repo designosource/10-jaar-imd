@@ -16,6 +16,8 @@ var flash = require('connect-flash');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://' + config.mongodb_user + ':' + config.mongodb_password +'@ds029630.mongolab.com:29630/imd_timeline');
 
+//mongoose.connect('mongodb://localhost/imdtimeline');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var facebookRoutes = require('./routes/facebook');
